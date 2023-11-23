@@ -9,13 +9,13 @@ from langchain.chat_models import ChatOpenAI
 import os
 
 os.environ["OPENAI_API_KEY"] = open("OPENAI_API_KEY", 'r').read()
-
+st.set_page_config(layout="wide")
 st.title('Analyse your CSV')
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-if csv := st.file_uploader('Upload your CSV', type='csv'):
+if csv := st.file_uploader('', type='csv'):
     data = pd.read_csv(csv, sep=',')
     chayGPTAgent = create_pandas_dataframe_agent(
         ChatOpenAI(model_name='gpt-4'),
@@ -27,12 +27,12 @@ if csv := st.file_uploader('Upload your CSV', type='csv'):
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    if prompt := st.chat_input("What is up?"):
+    if prompt := st.chat_input("Message..."):
 
         with st.chat_message("human"):
             st.markdown(prompt)
         with st.chat_message("ai"):
-            with st.spinner("Waiting...") :
+            with st.spinner("I'm thinking...") :
                 answer = chayGPTAgent.run(prompt)
                 st.markdown(answer)
         st.session_state.messages.append({"role": "human", "content": prompt})
