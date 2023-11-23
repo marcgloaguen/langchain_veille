@@ -19,7 +19,7 @@ if csv:
         verbose=True
     )
     st.dataframe(data)
-    prompt = st.text_input("Ask your question:")
+    prompt = st.text_input("Ask your question :")
     if prompt:
         with st.spinner('Wait for it...'):
             answer = chayGPTAgent.run(prompt)
