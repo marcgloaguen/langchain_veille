@@ -5,7 +5,8 @@ from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe
 from langchain.chat_models import ChatOpenAI
 
 import os
-os.environ["OPENAI_API_KEY"] = open("OPENAI_API_KEY",'r').read()
+
+os.environ["OPENAI_API_KEY"] = open("OPENAI_API_KEY", 'r').read()
 
 st.title('Analyse your CSV')
 
