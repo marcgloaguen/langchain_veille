@@ -23,6 +23,3 @@ if csv:
         with st.spinner('Wait for it...'):
             answer = chayGPTAgent.run(prompt)
             st.markdown(answer)
-
-
-
