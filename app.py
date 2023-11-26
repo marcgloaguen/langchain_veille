@@ -1,4 +1,5 @@
 import os
+import time
 
 import pandas as pd
 import streamlit as st
@@ -15,7 +16,7 @@ if "messages" not in st.session_state:
 if csv := st.file_uploader('', type='csv'):
     data = pd.read_csv(csv, sep=',')
     chayGPTAgent = create_pandas_dataframe_agent(
-        ChatOpenAI(model_name='gpt-4'),
+        ChatOpenAI(model_name='gpt-3.5-turbo'),
         df=data,
         verbose=True,
         handle_parsing_errors=True
@@ -32,9 +33,11 @@ if csv := st.file_uploader('', type='csv'):
             st.markdown(prompt)
         with st.chat_message("ai"):
             with st.spinner("I'm thinking..."):
+                start = time.time()
                 try:
                     answer = chayGPTAgent.run(prompt)
                 except:
                     answer = "i can't answer"
-                st.markdown(answer)
+                end = time.time()
+                st.markdown(f"{answer} *(exec time : {end-start:.2f}s)*")
         st.session_state.messages.extend([{"role": "human", "content": prompt}, {"role": "ai", "content": answer}])
