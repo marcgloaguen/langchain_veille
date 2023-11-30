@@ -13,10 +13,16 @@ st.title('Analyse your CSV')
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+ModelName = st.radio(
+    label="",
+    options=['gpt-4-1106-preview','gpt-3.5-turbo'],
+    horizontal=True
+)
+
 if csv := st.file_uploader('', type='csv'):
     data = pd.read_csv(csv, sep=',')
     chayGPTAgent = create_pandas_dataframe_agent(
-        ChatOpenAI(model_name='gpt-3.5-turbo'),
+        ChatOpenAI(model_name=ModelName),
         df=data,
         verbose=True,
         handle_parsing_errors=True
@@ -39,5 +45,11 @@ if csv := st.file_uploader('', type='csv'):
                 except:
                     answer = "i can't answer"
                 end = time.time()
-                st.markdown(f"{answer} *(exec time : {end-start:.2f}s)*")
-        st.session_state.messages.extend([{"role": "human", "content": prompt}, {"role": "ai", "content": answer}])
+                answer  = f"{answer}\n*(exec time : {end-start:.2f}s)*"
+                st.markdown(answer)
+        st.session_state.messages.extend(
+            [
+                {"role": "human", "content": prompt},
+                {"role": "ai", "content": answer}
+            ]
+        )
